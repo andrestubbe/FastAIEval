@@ -1,0 +1,6 @@
+fastaieval\ansi\FastAIEvalAnsi.class
+fastaieval\FastAIEval.class
+fastaieval\rag\RagEvaluator.class
+fastaieval\vision\VisionEvaluator.class
+fastaieval\metrics\EvalResult.class
+fastaieval\Demo.class
