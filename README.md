@@ -1,3 +1,6 @@
+> [!WARNING]
+> **🚧 WIP — Active AI Pipeline Construction & Architecture Optimization in Progress.**
+
 # FastAIEval 0.1.0 [ALPHA] — Sub-Millisecond Quantitative Evaluation & Grounding Engine for Java
 
 [![Status](https://img.shields.io/badge/status-0.1.0-brightgreen.svg)](https://github.com/andrestubbe/FastAIEval/releases/tag/0.1.0)
