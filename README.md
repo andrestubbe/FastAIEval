@@ -15,6 +15,8 @@
 
 **FastAIEval** is a high-throughput evaluation and grounding validation engine designed for real-time RAG pipelines (**[FastAIRag](https://github.com/andrestubbe/FastAIRag)**, **[FastAIVectorDB](https://github.com/andrestubbe/FastAIVectorDB)**) and computer vision agents (**[FastAIVision](https://github.com/andrestubbe/FastAIVision)**). It replaces slow, non-deterministic LLM-as-a-judge evaluators with microsecond heuristic and geometric validation running at over 1,350,000 evaluations per second.
 
+[Watch Demo (YouTube)] | [Watch JMH Benchmark (Youtube)]
+
 ---
 
 ## Quick Start
