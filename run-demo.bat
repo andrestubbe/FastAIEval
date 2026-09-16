@@ -1,10 +1,16 @@
 @echo off
 chcp 65001 >nul
 cd /d "%~dp0"
-set "MAVEN_OPTS=--enable-native-access=ALL-UNNAMED -Dorg.slf4j.simpleLogger.defaultLogLevel=warn"
 
-call mvn -q compile exec:java -Dexec.mainClass=fastaieval.Demo -Dorg.slf4j.simpleLogger.defaultLogLevel=warn
-if %ERRORLEVEL% NEQ 0 (
-    echo [ERROR] Demo execution failed!
-)
+echo [1/3] Building FastAIEval library...
+call mvn clean install -DskipTests -q
+if %errorlevel% neq 0 ( echo [ERROR] Build failed. & pause & exit /b 1 )
+
+echo [2/3] Compiling Demo...
+call mvn compile -q
+if %errorlevel% neq 0 ( echo [ERROR] Demo compile failed. & pause & exit /b 1 )
+
+echo [3/3] Running Demo...
+call mvn exec:java -Dexec.mainClass=fastaieval.Demo -q %*
+
 pause

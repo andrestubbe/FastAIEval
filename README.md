@@ -1,21 +1,19 @@
 > [!WARNING]
 > **🚧 WIP — Active AI Pipeline Construction & Architecture Optimization in Progress.**
 
-# FastAIEval 0.1.0 [ALPHA] — Sub-Millisecond Quantitative Evaluation & Grounding Engine for Java
+# FastAIEval 0.1.0 [ALPHA-2026-08-29]: Sub-Millisecond Quantitative Evaluation & Grounding Engine for Java
 
 [![Status](https://img.shields.io/badge/status-0.1.0-brightgreen.svg)](https://github.com/andrestubbe/FastAIEval/releases/tag/0.1.0)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Java](https://img.shields.io/badge/Java-17+-blue.svg)](https://www.java.com)
 [![Platform](https://img.shields.io/badge/Platform-Cross--Platform-lightgrey.svg)]()
-[![JitPack](https://img.shields.io/badge/JitPack-ready-green.svg)](https://jitpack.io/#andrestubbe/FastAIEval)
+[![JitPack](https://img.shields.io/badge/JitPack-0.1.0-green.svg)](https://jitpack.io/#andrestubbe/FastAIEval)
 
 ---
 
 **⚡ Quantitative RAG faithfulness scoring, hallucination detection, context recall, and vision bounding-box IoU accuracy for Java.**
 
 **FastAIEval** is a high-throughput evaluation and grounding validation engine designed for real-time RAG pipelines (**[FastAIRag](https://github.com/andrestubbe/FastAIRag)**, **[FastAIVectorDB](https://github.com/andrestubbe/FastAIVectorDB)**) and computer vision agents (**[FastAIVision](https://github.com/andrestubbe/FastAIVision)**). It replaces slow, non-deterministic LLM-as-a-judge evaluators with microsecond heuristic and geometric validation running at over 1,350,000 evaluations per second.
-
-[Watch Demo (YouTube)] | [Watch JMH Benchmark (Youtube)]
 
 ---
 
@@ -25,7 +23,7 @@
 import fastaieval.FastAIEval;
 import fastaieval.metrics.EvalResult;
 
-public class Example {
+public class Demo {
     public static void main(String[] args) {
         FastAIEval eval = new FastAIEval();
 
@@ -54,71 +52,82 @@ public class Example {
 
 - [Why FastAIEval?](#why-fastaieval)
 - [Quick Start](#quick-start)
-- [Features](#features)
+- [Key Features](#key-features)
+- [Real-World Use Cases](#real-world-use-cases)
 - [Performance Benchmarks](#performance-benchmarks)
 - [API Quick Reference](#api-quick-reference)
-- [Technical Examples & Hero Demos](#technical-examples--hero-demos)
+- [Technical Demos & Benchmarks](#technical-demos--benchmarks)
 - [Installation](#installation)
 - [Documentation](#documentation)
 - [Platform Support](#platform-support)
-- [License](#license)
 - [Related Projects](#related-projects)
+- [License](#license)
 
 ---
 
 ## Why FastAIEval?
 
-Evaluating AI pipelines with cloud-based LLMs introduces severe latency, financial cost, and non-deterministic variability:
+Evaluating AI pipelines with cloud-based LLM-as-a-judge patterns introduces severe latency, high financial cost, and unpredictable non-deterministic variability:
 
-- **The LLM-as-a-Judge Bottleneck**: Calling GPT-4 to judge RAG outputs adds 800–1,500 ms of latency per response.
-- **Flaky Hallucination Detection**: LLMs frequently hallucinate when judging other LLMs.
-- **No Real-Time Vision Benchmarking**: Computer vision and UI agents require instant geometric Intersection-over-Union (IoU) evaluation.
-
-**FastAIEval** solves this:
-
-- **Sub-Millisecond Evaluation**: Computes lexical grounding, context recall, and token faithfulness in under **3 microseconds**.
-- **Deterministic Geometric IoU**: Benchmarks object detection accuracy at over **1,350,000 evaluations per second**.
-- **Zero-Allocation Hot Path**: Operates with zero JVM heap churn during continuous RAG validation.
+| Feature | LLM-as-a-Judge (GPT-4 / Claude) | FastAIEval |
+|:---|:---|:---|
+| **Evaluation Latency** | 800–1,500 ms per check | Sub-millisecond (<3 µs execution) |
+| **Deterministic Consistency**| Variable scores across calls | 100% deterministic mathematical scoring |
+| **Operational Cost** | Ongoing token / API costs per judge call | Zero recurring cost (runs in-process on CPU) |
+| **Throughput** | 10–50 requests/second (rate-limited) | Over 1,350,000 evaluations/second |
+| **Vision Grounding** | Requires expensive multimodal API call | Instant geometric Intersection-over-Union (IoU) |
+| **Heap Allocation** | Heavy JSON parsing and network objects | Zero-allocation hot path during continuous validation |
 
 ---
 
-## Features
+## Key Features
 
-- **🎯 RAG Faithfulness & Hallucination Scoring**: Quantifies response grounding against retrieved vector chunks.
-- **🔍 Context Recall Metrics**: Evaluates retrieved document coverage against ground-truth queries.
-- **📐 Vision Bounding-Box IoU**: Evaluates object localization precision against target coordinates.
-- **⚡ Microsecond Latencies**: Runs entirely in-process without external API calls or GPU dependencies.
-- **📊 FastANSI 120-Column HUD**: Terminal telemetry displaying evaluation verdict trees, accuracy scores, and latencies.
+- 🎯 **RAG Faithfulness & Hallucination Scoring**: Quantifies response grounding against retrieved context chunks in microseconds.
+- 🔍 **Context Recall Metrics**: Evaluates retrieved document coverage against ground-truth queries without model calls.
+- 📐 **Vision Bounding-Box IoU**: Computes object localization precision and grounding overlap at over 1.35 million ops/sec.
+- ⚡ **Zero External Dependencies**: Operates entirely in-process on standard JVM runtimes with zero external API calls.
+- 📊 **FastANSI Terminal HUD**: Embedded terminal telemetry showcasing evaluation verdict trees, accuracy scores, and latencies.
+
+---
+
+## Real-World Use Cases
+
+- 🛡️ **In-Flight RAG Hallucination Filtering**: Intercept generated answers before returning them to users, blocking responses below a 90% faithfulness threshold.
+- 🧪 **Continuous CI/CD AI Benchmarking**: Run massive test suites with thousands of evaluation cases in milliseconds without spending cloud API credits.
+- 👁️ **Automated UI Element Grounding**: Verify that screen-parsing AI agents accurately target UI components by comparing predicted bounding boxes with true element boundaries.
+- 📈 **Vector Search Quality Audits**: Benchmark different retrieval chunking strategies by measuring context recall scores across test datasets.
 
 ---
 
 ## Performance Benchmarks
 
-FastAIEval is rigorously profiled using **JMH** to guarantee zero overhead.
+Measured on official [JMH Benchmark](examples/Benchmark) (Throughput in `ops/ms`):
 
-| Metric / Evaluation Type | Score (ops/ms) | Ops per Second |
-|---|---|---|
-| **Vision Bounding Box IoU Evaluation** | **~1,357 ops/ms** | **> 1.35 Million** |
-| **RAG Faithfulness & Grounding Check** | **~326 ops/ms** | **> 326,000** |
+```text
+Benchmark                                     Mode  Cnt     Score   Units
+FastAIEvalBenchmark.benchmarkBoxIoU          thrpt    3  1357.420  ops/ms
+FastAIEvalBenchmark.benchmarkFaithfulness    thrpt    3   326.115  ops/ms
+```
 
-*Measured on Windows 11 x64, Intel Core i5 (Surface Pro 8), JDK 21.0.12.1.*
+> [!NOTE]
+> **Environment**: Windows 11 x64, Intel Core i5 (Surface Pro 8), JDK 21.0.12.1. `evaluateBoxIoU` achieves over **1.35 million evaluations/sec** with zero heap allocations, while lexical `evaluateFaithfulness` processes over **326,000 checks/sec**.
 
 ---
 
 ## API Quick Reference
 
-| Method | Description |
-|---|---|
-| `eval.evaluateFaithfulness(context, response)` | Computes lexical grounding and hallucination resistance. |
-| `eval.evaluateContextRecall(truth, retrieved)` | Evaluates document retrieval coverage. |
-| `eval.evaluateBoxIoU(predBox, targetBox)` | Evaluates geometric bounding-box overlap accuracy. |
+| Method | Return Type | Description | Docs |
+|:---|:---|:---|:---|
+| `evaluateFaithfulness(context, response)` | `EvalResult` | Computes lexical grounding and hallucination resistance. | [Reference](docs/REFERENCE.md) |
+| `evaluateContextRecall(truth, retrieved)` | `EvalResult` | Evaluates document retrieval coverage against ground truth. | [Reference](docs/REFERENCE.md) |
+| `evaluateBoxIoU(predBox, targetBox)` | `EvalResult` | Evaluates geometric bounding-box overlap accuracy. | [Reference](docs/REFERENCE.md) |
 
 ---
 
-## Technical Examples & Hero Demos
+## Technical Demos & Benchmarks
 
 | Case | Java Example | Launcher | Description |
-|---|---|---|---|
+|:---|:---|:---|:---|
 | **Interactive 120-Column HUD Demo** | [Demo.java](src/main/java/fastaieval/Demo.java) | `run-demo.bat` | Terminal demonstration of RAG hallucination checks and vision IoU evaluation. |
 | **JMH Microbenchmark Suite** | [FastAIEvalBenchmark.java](examples/Benchmark/src/main/java/fastaieval/benchmark/FastAIEvalBenchmark.java) | `run-benchmark.bat` | Formal OpenJDK JMH throughput measurements across evaluation kernels. |
 
@@ -139,6 +148,7 @@ Add the JitPack repository and the dependency to your `pom.xml`:
 </repositories>
 
 <dependencies>
+    <!-- FastAIEval - Quantitative AI Grounding Engine -->
     <dependency>
         <groupId>com.github.andrestubbe</groupId>
         <artifactId>FastAIEval</artifactId>
@@ -148,6 +158,7 @@ Add the JitPack repository and the dependency to your `pom.xml`:
 ```
 
 ### Option 2: Gradle (via JitPack)
+
 ```groovy
 repositories {
     maven { url 'https://jitpack.io' }
@@ -159,47 +170,46 @@ dependencies {
 ```
 
 ### Option 3: Direct Download (No Build Tool)
-Download the latest JARs directly to add them to your classpath:
 
-1. 📦 **[FastAIEval-0.1.0.jar](https://github.com/andrestubbe/FastAIEval/releases/download/0.1.0/FastAIEval-0.1.0.jar)** (The Core Evaluation Engine)
-2. ⚙️ **[fastcore-0.1.0.jar](https://github.com/andrestubbe/FastCore/releases/download/0.1.0/fastcore-0.1.0.jar)** (The Mandatory Runtime Substrate)
+Download the release JARs directly from GitHub Releases:
+
+1. 📦 **[FastAIEval-0.1.0.jar](https://github.com/andrestubbe/FastAIEval/releases/tag/0.1.0)** (Core Evaluation Engine)
 
 ---
 
 ## Documentation
 
-* **[REFERENCE.md](docs/REFERENCE.md)**: Full API descriptions, metrics, and threshold contracts.
-* **[PHILOSOPHY.md](docs/PHILOSOPHY.md)**: The architectural rationale for deterministic microsecond evaluation.
-* **[ROADMAP.md](docs/ROADMAP.md)**: Future milestones, BERTScore embeddings, and mAP@50:95 tables.
-* **[CHANGELOG.md](docs/CHANGELOG.md)**: Release history and version migration details.
+- **[REFERENCE.md](docs/REFERENCE.md)**: Full API descriptions, metrics, and threshold contracts.
+- **[PHILOSOPHY.md](docs/PHILOSOPHY.md)**: Architectural rationale for deterministic microsecond evaluation.
+- **[ROADMAP.md](docs/ROADMAP.md)**: Future milestones, embedding-based scoring, and mAP metrics.
+- **[CHANGELOG.md](docs/CHANGELOG.md)**: Release history and version notes.
 
 ---
 
 ## Platform Support
 
-| Platform | Status |
-|---|---|
-| Windows 10/11 (x64) | ✅ Fully Supported |
-| Linux (x64 / AArch64) | ✅ Fully Supported |
-| macOS (Apple Silicon / Intel) | ✅ Fully Supported |
-
----
-
-## License
-
-MIT License — See [LICENSE](LICENSE) for details.
+| Platform | Architecture | Status | Notes |
+|:---|:---:|:---:|:---|
+| **Windows 10 / 11** | x64 | ✅ Fully Supported | Zero-allocation in-process evaluation |
+| **Linux** | x64 / AArch64 | ✅ Fully Supported | Pure JVM execution with SIMD-ready paths |
+| **macOS** | Apple Silicon / x64 | ✅ Fully Supported | Pure JVM execution across Apple Silicon & Intel |
 
 ---
 
 ## Related Projects
 
-Combine FastAIEval with other FastJava AI engines:
-
-* [**FastAIRag**](https://github.com/andrestubbe/FastAIRag) — In-process Retrieval-Augmented Generation substrate.
-* [**FastAIVectorDB**](https://github.com/andrestubbe/FastAIVectorDB) — Ultrafast embedded vector database.
-* [**FastAIVision**](https://github.com/andrestubbe/FastAIVision) — Real-time YOLO detection and ByteTrack tracking.
-* [**FastAIGuard**](https://github.com/andrestubbe/FastAIGuard) — Deterministic AI security firewall.
+- **[`FastAIRag`](https://github.com/andrestubbe/FastAIRag)**: In-Process Retrieval-Augmented Generation Substrate
+- **[`FastAIVectorDB`](https://github.com/andrestubbe/FastAIVectorDB)**: High-Throughput SIMD/AVX2 Vector Database
+- **[`FastAIVision`](https://github.com/andrestubbe/FastAIVision)**: High-Speed Local Multimodal Vision and Screen-VLM Engine
+- **[`FastAIGuard`](https://github.com/andrestubbe/FastAIGuard)**: Deterministic AI Security and Prompt Injection Firewall
+- **[`FastCore`](https://github.com/andrestubbe/FastCore)**: Native Library Loader & JNI Utilities for Java
 
 ---
 
-**Part of the FastJava Ecosystem** — *Making the JVM faster.*
+## License
+
+MIT License. See [LICENSE](LICENSE) file for details.
+
+---
+
+**Part of the FastJava Ecosystem** — *Making the JVM faster.* 🚀
