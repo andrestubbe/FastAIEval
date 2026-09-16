@@ -110,9 +110,9 @@ FastAIEval solves this by replacing expensive model calls with deterministic, mi
 Measured on official [JMH Benchmark](examples/Benchmark) (Throughput in `ops/ms`):
 
 ```text
-Benchmark                                     Mode  Cnt     Score   Units
-FastAIEvalBenchmark.benchmarkBoxIoU          thrpt    3  1357.420  ops/ms
-FastAIEvalBenchmark.benchmarkFaithfulness    thrpt    3   326.115  ops/ms
+Benchmark                        Mode  Cnt     Score   Units
+Benchmark.benchmarkBoxIoU       thrpt    3  1357.420  ops/ms
+Benchmark.benchmarkFaithfulness thrpt    3   326.115  ops/ms
 ```
 
 > [!NOTE]
@@ -135,7 +135,7 @@ FastAIEvalBenchmark.benchmarkFaithfulness    thrpt    3   326.115  ops/ms
 | Case | Java Example | Launcher | Description |
 |:---|:---|:---|:---|
 | **Interactive 120-Column HUD Demo** | [Demo.java](src/main/java/fastaieval/Demo.java) | `run-demo.bat` | Terminal demonstration of RAG hallucination checks and vision IoU evaluation. |
-| **JMH Microbenchmark Suite** | [FastAIEvalBenchmark.java](examples/Benchmark/src/main/java/fastaieval/benchmark/FastAIEvalBenchmark.java) | `run-benchmark.bat` | Formal OpenJDK JMH throughput measurements across evaluation kernels. |
+| **JMH Microbenchmark Suite** | [Benchmark.java](examples/Benchmark/src/main/java/fastaieval/benchmark/Benchmark.java) | `run-benchmark.bat` | Formal OpenJDK JMH throughput measurements across evaluation kernels. |
 
 ---
 
