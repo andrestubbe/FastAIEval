@@ -69,6 +69,12 @@ public class Demo {
 
 Evaluating AI pipelines with cloud-based LLM-as-a-judge patterns introduces severe latency, high financial cost, and unpredictable non-deterministic variability:
 
+- **The LLM-as-a-Judge Bottleneck**: Querying an external model to evaluate RAG responses adds 800–1,500 ms of latency per check, making in-line validation impossible.
+- **Flaky Hallucination Detection**: LLMs frequently hallucinate when evaluating other LLMs, introducing non-reproducible benchmark drift.
+- **No Real-Time Vision Benchmarking**: Computer vision and screen-automation agents require instant geometric Intersection-over-Union (IoU) evaluation to ground bounding boxes.
+
+FastAIEval solves this by replacing expensive model calls with deterministic, microsecond mathematical evaluators:
+
 | Feature | LLM-as-a-Judge (GPT-4 / Claude) | FastAIEval |
 |:---|:---|:---|
 | **Evaluation Latency** | 800–1,500 ms per check | Sub-millisecond (<3 µs execution) |
